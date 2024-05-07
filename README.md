@@ -9,6 +9,7 @@ In case of currency pair is not available in currate.ru the system converts thro
 - Please go to the project root directory and run `docker compose up -d`
 - Please go inside container with this command: `docker exec -it php bash`
 - In the container run `composer up`
+
 After that, project should be available at http://localhost:8080/
 
 
