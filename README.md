@@ -6,8 +6,11 @@ In case of currency pair is not available in currate.ru the system converts thro
 **PLEASE NOTE:** Unfortunately the currate.ru provides only the old data for the rates that were actual in 2018-2019.
 
 # Installation
-Please go to the project root directory and run `docker compose up -d`. 
+- Please go to the project root directory and run `docker compose up -d`
+- Please go inside container with this command: `docker exec -it php bash`
+- In the container run `composer up`
 After that, project should be available at http://localhost:8080/
+
 
 # Possible ways to improve 
 It is possible to add other currency providers, and it would be nice to add a “fallback” provider in case of base provider is not response. 
