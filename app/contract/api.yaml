@@ -1,0 +1,161 @@
+openapi: 3.0.0
+info:
+  title: Currency Converter API
+  description: API to fetch available currencies, convert amounts between currencies, and fetch random exchange rates for the testing purposes.
+  version: "1.0.0"
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Development server
+paths:
+  /currencies-list:
+    get:
+      summary: Retrieve a list of currencies
+      operationId: getCurrencies
+      tags:
+        - Currency
+      description: |
+        This endpoint retrieves a list of all available currency codes supported by the system.
+        It is useful for clients that need to understand what currency options they can operate with
+        within the application.
+      responses:
+        '200':
+          description: Successfully retrieved the list of currencies.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  description: A currency code in ISO format.
+                  example: ["USD", "EUR", "JPY", "GBP"]
+              examples:
+                example-1:
+                  summary: Example response
+                  value: ["BCH", "EUR", "GBP", "JPY", "RUB", "USD", "XRP", "BTC", "BTG", "BYN", "CAD", "CHF", "CNY", "ETH", "AED", "AMD", "BGN", "KZT", "TRY", "AUD", "GEL", "IDR", "AZN", "LKR", "MDL", "MMK", "RSD", "MYR", "NZD", "SGD", "UAH", "THB", "ILS", "KGS", "VND", "ZEC"]
+        '400':
+          description: Bad request due to invalid request parameters.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid parameters provided."
+        '404':
+          description: The requested resource was not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Resource not found."
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Internal server error occurred."
+  /convert:
+    get:
+      summary: Convert currency amount
+      operationId: convertCurrency
+      parameters:
+        - name: from
+          in: query
+          description: The currency code to convert from
+          required: true
+          schema:
+            type: string
+            example: ETH
+        - name: to
+          in: query
+          description: The currency code to convert to
+          required: true
+          schema:
+            type: string
+            example: BTC
+        - name: amount
+          in: query
+          description: The amount to convert
+          required: true
+          schema:
+            type: number
+            format: double
+            example: 3456
+      responses:
+        '200':
+          description: Successful conversion
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  from:
+                    type: string
+                    example: ETH
+                  to:
+                    type: string
+                    example: BTC
+                  amount:
+                    type: number
+                    format: double
+                    example: 3456
+                  convertedAmount:
+                    type: string
+                    description: The result of the conversion as a string to preserve precision
+                    example: "92.17831342464"
+                  rate:
+                    type: string
+                    description: The conversion rate used for the calculation
+                    example: "0.02667196569"
+        '400':
+          description: Bad request, possibly due to missing or invalid parameters
+        '404':
+          description: Resource not found
+        '500':
+          description: Internal Server Error
+  /test-provider:
+    get:
+      summary: Fetch random rates for specified currency pairs in the testing purposes.
+      operationId: getRandomRates
+      parameters:
+        - name: pairs
+          in: query
+          description: Comma-separated list of currency pairs
+          required: true
+          schema:
+            type: string
+            example: ETHBTC,EURRUB
+      responses:
+        '200':
+          description: A successful response containing random rates for the specified pairs
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "rates"
+                  data:
+                    type: object
+                    additionalProperties:
+                      type: number
+                      format: double
+                      example: {"ETHBTC": 87.87, "EURRUB": 51.23}
+        '400':
+          description: Bad request, possibly due to missing or invalid parameters
+        '404':
+          description: Not found
+        '500':
+          description: Internal Server Error
