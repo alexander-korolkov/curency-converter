@@ -31,7 +31,7 @@ class CurrencyConverterController extends AbstractController
         } catch (HttpException $e) {
             $message = json_decode($e->getMessage());
             $message = $message ?? $e->getMessage();
-            $this->logger->error('HttpException in CurrencyConverterController: ' . $message);
+            $this->logger->error('HttpException in CurrencyConverterController: ' . $e->getMessage());
 
             return $this->json(['errors' => $message], $e->getStatusCode());
         } catch (Throwable $e) {
