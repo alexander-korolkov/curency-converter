@@ -32,8 +32,8 @@ class CurrencyConversionDTOFactory
     public function createFromRequest(Request $request): CurrencyConversionDTO
     {
         $conversionDTO = new CurrencyConversionDTO();
-        $conversionDTO->from = $request->query->get('from');
-        $conversionDTO->to = $request->query->get('to');
+        $conversionDTO->from = strtoupper($request->query->get('from'));
+        $conversionDTO->to = strtoupper($request->query->get('to'));
         $conversionDTO->amount = (float) $request->query->get('amount', 0);
 
         $violations = $this->validator->validate($conversionDTO);
